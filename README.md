@@ -47,7 +47,7 @@ POSTGRES_PASSWORD=YOUR_DB_PASS
 POSTGRES_DATABASE=YOUR_DATABASE_NAME
 POSTGRES_HOST=localhost
 POSTGRES_PORT=5432
-POSTGRES_USER=postgres
+POSTGRES_USER=postgres #default user on postgresql
 ```
 
 4. Instalar dependencias
@@ -56,13 +56,13 @@ POSTGRES_USER=postgres
 yarn install
 ```
 
-5. Crear la base de datos postgresql( docker instalado)
+5. Crear la base de datos postgresql (Requisito:docker instalado)
 
 ```bash
 docker compose up -d
 ```
 
-6. Levantar el proyecto( developer)
+6. Levantar el proyecto (en dev mode)
 
 ```bash
 yarn start:dev
