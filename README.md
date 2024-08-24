@@ -36,13 +36,33 @@
 npm install --global yarn
 ```
 
-3. Instalar dependencias
+3. Crear una copia del `.env.template` y renombrarlo a `.env` y cambiar las variables de entorno.
+
+```bash
+STAGE=dev
+PORT=3000 #default port
+
+# Complete this fields with your own keys
+POSTGRES_PASSWORD=YOUR_DB_PASS
+POSTGRES_DATABASE=YOUR_DATABASE_NAME
+POSTGRES_HOST=localhost
+POSTGRES_PORT=5432
+POSTGRES_USER=postgres
+```
+
+4. Instalar dependencias
 
 ```bash
 yarn install
 ```
 
-4. Levantar el proyecto( developer)
+5. Crear la base de datos postgresql( docker instalado)
+
+```bash
+docker compose up -d
+```
+
+6. Levantar el proyecto( developer)
 
 ```bash
 yarn start:dev
