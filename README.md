@@ -56,7 +56,7 @@ POSTGRES_USER=postgres #default user on postgresql
 yarn install
 ```
 
-5. Crear la base de datos postgresql (Requisito:docker instalado)
+5. Crear la base de datos postgresql (Requisito: docker instalado)
 
 ```bash
 docker compose up -d

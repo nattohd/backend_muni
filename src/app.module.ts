@@ -2,6 +2,8 @@ import { Module } from '@nestjs/common';
 import { ConfigModule } from '@nestjs/config';
 import { ScheduleModule } from '@nestjs/schedule';
 import { TypeOrmModule } from '@nestjs/typeorm';
+import { InventarioModule } from './inventario/inventario.module';
+
 
 
 @Module({
@@ -20,6 +22,7 @@ import { TypeOrmModule } from '@nestjs/typeorm';
       synchronize: !(process.env.STAGE === 'prod'), // in prod should in false
       autoLoadEntities: true,
     }),
+    InventarioModule,
   ],
 })
 export class AppModule { }
