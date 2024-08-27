@@ -1,4 +1,4 @@
-import { IsOptional, IsString } from "class-validator";
+import { IsOptional, IsString, IsUUID } from "class-validator";
 
 export class CreateProductoDto {
 
@@ -16,5 +16,8 @@ export class CreateProductoDto {
     @IsString()
     @IsOptional()
     urlImagen?: string;
+
+    @IsUUID()
+    idCategoria: string;
 
 }

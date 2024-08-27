@@ -1,4 +1,4 @@
-import { Injectable, } from '@nestjs/common';
+import { Injectable, NotFoundException, } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { CreateCategoriaDto } from 'src/inventario/dto/categoria-dto/create-categoria.dto';
 import { Categoria } from 'src/inventario/entities/categoria.entity';
@@ -21,6 +21,18 @@ export class CategoriasService extends BaseService<Categoria> {
                 ...createCategoriaDto,
             });
             const categoria = await this.categoriaRepository.save(categoriaCreated);
+            return categoria;
+        } catch (error) {
+            this.handleDbExceptions(error);
+        }
+    }
+
+    async findOneById(id: string) {
+        try {
+            const categoria = await this.categoriaRepository.findOne({ where: { id }, });
+            if (!categoria) {
+                throw new NotFoundException(`Categoria with ID ${id} not found`);
+            }
             return categoria;
         } catch (error) {
             this.handleDbExceptions(error);

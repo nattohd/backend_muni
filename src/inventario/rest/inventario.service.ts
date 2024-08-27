@@ -52,10 +52,32 @@ export class InventarioService {
     return ubicacion;
   }
 
+  //!Proceso que requiere mucha carga, será lento.
   async createTanda(createTandaDto: CreateTandaDto) {
-    const tanda = await this.tandasService.createTanda(createTandaDto);
-    //TODO: notificar por sockets
-    return tanda;
+    try {
+      const { idBodega, idCategoria, idProducto, idUbicacion } = createTandaDto;
+      const bodega = await this.bodegasService.findOneById(idBodega);
+      const categoria = await this.categoriaService.findOneById(idCategoria);
+      const producto = await this.productoService.findOneById(idProducto);
+      const ubicacion = await this.ubicacionesService.findOneById(idUbicacion);
+
+      const { cantidadIngresada, fechaVencimiento } = createTandaDto;
+
+      const tanda = await this.tandasService.createTanda({
+        cantidadIngresada,
+        cantidadActual: cantidadIngresada,
+        fechaVencimiento,
+        bodega,
+        categoria,
+        producto,
+        ubicacion,
+      });
+      //TODO: notificar por sockets
+      return tanda;
+    } catch (error) {
+      console.log({ error })
+      throw new BadRequestException(error.message);
+    }
   }
 
 

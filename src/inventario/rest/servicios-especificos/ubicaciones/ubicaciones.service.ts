@@ -1,4 +1,4 @@
-import { Injectable, } from '@nestjs/common';
+import { Injectable, NotFoundException, } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { CreateUbicacionDto } from 'src/inventario/dto/ubicacion-dto/create-ubicacion.dto';
 import { Ubicacion } from 'src/inventario/entities/ubicacion.entity';
@@ -22,6 +22,18 @@ export class UbicacionesService extends BaseService<Ubicacion> {
                 ...createUbicacionDto,
             });
             const ubicacion = await this.ubicacionRepository.save(ubicacionCreated);
+            return ubicacion;
+        } catch (error) {
+            this.handleDbExceptions(error);
+        }
+    }
+
+    async findOneById(id: string) {
+        try {
+            const ubicacion = await this.ubicacionRepository.findOne({ where: { id }, });
+            if (!ubicacion) {
+                throw new NotFoundException(`Ubicacion with ID ${id} not found`);
+            }
             return ubicacion;
         } catch (error) {
             this.handleDbExceptions(error);

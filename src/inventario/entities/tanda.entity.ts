@@ -12,7 +12,10 @@ export class Tanda {
     @Column()
     cantidadIngresada: number;
 
-    @Column({ type: 'date' })
+    @Column()
+    cantidadActual: number;
+
+    @Column({ type: 'date', default: () => 'CURRENT_DATE' })
     fechaLlegada: Date;
 
     @Column({ type: 'date' })

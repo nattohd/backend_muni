@@ -2,6 +2,9 @@ import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/commo
 import { InventarioService } from './inventario.service';
 import { CreateProductoDto } from '../dto/producto-dto/create-producto.dto';
 import { CreateCategoriaDto } from '../dto/categoria-dto/create-categoria.dto';
+import { CreateUbicacionDto } from '../dto/ubicacion-dto/create-ubicacion.dto';
+import { CreateBodegaDto } from '../dto/bodega-dto/create-bodega.dto';
+import { CreateTandaDto } from '../dto/tanda-dto/create-tanda.dto';
 
 
 @Controller('inventario')
@@ -15,6 +18,18 @@ export class InventarioController {
   @Post('categorias')
   createCategoria(@Body() createCategoriaDto: CreateCategoriaDto) {
     return this.inventarioService.createCategoria(createCategoriaDto);
+  }
+  @Post('ubicaciones')
+  createUbicacion(@Body() createUbicacionDto: CreateUbicacionDto) {
+    return this.inventarioService.createUbicacion(createUbicacionDto);
+  }
+  @Post('bodegas')
+  createBodega(@Body() createBodegaDto: CreateBodegaDto) {
+    return this.inventarioService.createBodega(createBodegaDto);
+  }
+  @Post('tandas')
+  createTanda(@Body() createTandaDto: CreateTandaDto) {
+    return this.inventarioService.createTanda(createTandaDto);
   }
 
   // @Get()

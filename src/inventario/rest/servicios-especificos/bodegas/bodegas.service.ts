@@ -1,4 +1,4 @@
-import { Injectable, } from '@nestjs/common';
+import { Injectable, NotFoundException, } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { CreateBodegaDto } from 'src/inventario/dto/bodega-dto/create-bodega.dto';
 import { Bodega } from 'src/inventario/entities/bodega.entity';
@@ -20,6 +20,18 @@ export class BodegasService extends BaseService<Bodega> {
                 ...createBodegaDto,
             });
             const bodega = await this.bodegaRepository.save(bodegaCreated);
+            return bodega;
+        } catch (error) {
+            this.handleDbExceptions(error);
+        }
+    }
+
+    async findOneById(id: string) {
+        try {
+            const bodega = await this.bodegaRepository.findOne({ where: { id }, });
+            if (!bodega) {
+                throw new NotFoundException(`Bodega with ID ${id} not found`);
+            }
             return bodega;
         } catch (error) {
             this.handleDbExceptions(error);
