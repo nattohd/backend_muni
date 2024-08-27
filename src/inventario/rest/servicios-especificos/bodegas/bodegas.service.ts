@@ -1,17 +1,19 @@
-import { BadRequestException, Injectable, InternalServerErrorException, Logger } from '@nestjs/common';
+import { Injectable, } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { CreateBodegaDto } from 'src/inventario/dto/bodega-dto/create-bodega.dto';
 import { Bodega } from 'src/inventario/entities/bodega.entity';
 import { Repository } from 'typeorm';
+import { BaseService } from '../base.service';
 
 @Injectable()
-export class BodegasService {
-    private readonly logger = new Logger('BodegasService');
+export class BodegasService extends BaseService<Bodega> {
     constructor(
         @InjectRepository(Bodega)
         private readonly bodegaRepository: Repository<Bodega>,
 
-    ) { }
+    ) {
+        super(bodegaRepository, 'BodegasService');
+    }
     async createBodega(createBodegaDto: CreateBodegaDto) {
         try {
             const bodegaCreated = this.bodegaRepository.create({
@@ -24,22 +26,4 @@ export class BodegasService {
         }
     }
 
-    async deleteAllBodegas() {
-        const query = this.bodegaRepository.createQueryBuilder('bodegas');
-        try {
-            return await query.delete().where({}).execute();
-        } catch (error) {
-            this.handleDbExceptions(error);
-        }
-    }
-
-    private handleDbExceptions(error: any) {
-        this.logger.error(error);
-        if (error.code === '23505') {
-            throw new BadRequestException(error.detail);
-        }
-        throw new InternalServerErrorException(
-            'Error inesperado, check logs del server.',
-        );
-    }
 }

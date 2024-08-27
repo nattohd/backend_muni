@@ -1,17 +1,18 @@
-import { BadRequestException, Injectable, InternalServerErrorException, Logger } from '@nestjs/common';
+import { Injectable, } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { CreateCategoriaDto } from 'src/inventario/dto/categoria-dto/create-categoria.dto';
 import { Categoria } from 'src/inventario/entities/categoria.entity';
 import { Repository } from 'typeorm';
+import { BaseService } from '../base.service';
 
 @Injectable()
-export class CategoriasService {
-    private readonly logger = new Logger('CategoriasService');
+export class CategoriasService extends BaseService<Categoria> {
     constructor(
         @InjectRepository(Categoria)
         private readonly categoriaRepository: Repository<Categoria>,
-
-    ) { }
+    ) {
+        super(categoriaRepository, 'CategoriasService');
+    }
 
 
     async createCategoria(createCategoriaDto: CreateCategoriaDto) {
@@ -27,23 +28,6 @@ export class CategoriasService {
     }
 
 
-    async deleteAllCategorias() {
-        const query = this.categoriaRepository.createQueryBuilder('categorias');
-        try {
-            return await query.delete().where({}).execute();
-        } catch (error) {
-            this.handleDbExceptions(error);
-        }
-    }
 
-    private handleDbExceptions(error: any) {
-        this.logger.error(error);
-        if (error.code === '23505') {
-            throw new BadRequestException(error.detail);
-        }
-        throw new InternalServerErrorException(
-            'Error inesperado, check logs del server.',
-        );
-    }
 
 }

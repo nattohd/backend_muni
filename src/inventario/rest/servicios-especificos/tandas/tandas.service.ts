@@ -1,17 +1,20 @@
-import { BadRequestException, Injectable, InternalServerErrorException, Logger } from '@nestjs/common';
+import { Injectable, } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { CreateTandaDto } from 'src/inventario/dto/tanda-dto/create-tanda.dto';
 import { Tanda } from 'src/inventario/entities/tanda.entity';
 import { Repository } from 'typeorm';
+import { BaseService } from '../base.service';
 
 @Injectable()
-export class TandasService {
-    private readonly logger = new Logger('TandasService');
+export class TandasService extends BaseService<Tanda> {
     constructor(
         @InjectRepository(Tanda)
         private readonly tandaRepository: Repository<Tanda>,
 
-    ) { }
+    ) {
+
+        super(tandaRepository, 'TandasService');
+    }
 
     async createTanda(createTandaDto: CreateTandaDto) {
         try {
@@ -26,22 +29,5 @@ export class TandasService {
     }
 
 
-    async deleteAllTandas() {
-        const query = this.tandaRepository.createQueryBuilder('tandas');
-        try {
-            return await query.delete().where({}).execute();
-        } catch (error) {
-            this.handleDbExceptions(error);
-        }
-    }
 
-    private handleDbExceptions(error: any) {
-        this.logger.error(error);
-        if (error.code === '23505') {
-            throw new BadRequestException(error.detail);
-        }
-        throw new InternalServerErrorException(
-            'Error inesperado, check logs del server.',
-        );
-    }
 }

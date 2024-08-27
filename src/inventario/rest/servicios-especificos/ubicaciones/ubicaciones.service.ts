@@ -1,17 +1,20 @@
-import { BadRequestException, Injectable, InternalServerErrorException, Logger } from '@nestjs/common';
+import { Injectable, } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { CreateUbicacionDto } from 'src/inventario/dto/ubicacion-dto/create-ubicacion.dto';
 import { Ubicacion } from 'src/inventario/entities/ubicacion.entity';
 import { Repository } from 'typeorm';
+import { BaseService } from '../base.service';
 
 @Injectable()
-export class UbicacionesService {
-    private readonly logger = new Logger('UbicacionesService');
+export class UbicacionesService extends BaseService<Ubicacion> {
     constructor(
         @InjectRepository(Ubicacion)
         private readonly ubicacionRepository: Repository<Ubicacion>,
 
-    ) { }
+    ) {
+
+        super(ubicacionRepository, 'UbicacionesService');
+    }
 
     async createUbicacion(createUbicacionDto: CreateUbicacionDto) {
         try {
@@ -25,22 +28,5 @@ export class UbicacionesService {
         }
     }
 
-    async deleteAllUbicaciones() {
-        const query = this.ubicacionRepository.createQueryBuilder('ubicaciones');
-        try {
-            return await query.delete().where({}).execute();
-        } catch (error) {
-            this.handleDbExceptions(error);
-        }
-    }
 
-    private handleDbExceptions(error: any) {
-        this.logger.error(error);
-        if (error.code === '23505') {
-            throw new BadRequestException(error.detail);
-        }
-        throw new InternalServerErrorException(
-            'Error inesperado, check logs del server.',
-        );
-    }
 }
