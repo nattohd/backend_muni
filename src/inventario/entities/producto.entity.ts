@@ -10,6 +10,9 @@ export class Producto {
     nombre: string;
 
     @Column({ nullable: true })
+    barcode?: string;
+
+    @Column({ nullable: true })
     descripcion?: string;
 
     @Column({ nullable: true })

@@ -9,6 +9,11 @@ import { Categoria } from "./entities/categoria.entity";
 import { Ubicacion } from "./entities/ubicacion.entity";
 import { Producto } from "./entities/producto.entity";
 import { Tanda } from "./entities/tanda.entity";
+import { ProductosService } from './rest/servicios-especificos/productos/productos.service';
+import { CategoriasService } from './rest/servicios-especificos/categorias/categorias.service';
+import { BodegasService } from './rest/servicios-especificos/bodegas/bodegas.service';
+import { TandasService } from './rest/servicios-especificos/tandas/tandas.service';
+import { UbicacionesService } from './rest/servicios-especificos/ubicaciones/ubicaciones.service';
 
 
 @Module({
@@ -22,6 +27,11 @@ import { Tanda } from "./entities/tanda.entity";
         InventarioService,
         InventarioSocketService,
         InventarioSocketGateway,
+        ProductosService,
+        CategoriasService,
+        BodegasService,
+        TandasService,
+        UbicacionesService,
     ],
     exports: [InventarioService, InventarioSocketService],
 })
