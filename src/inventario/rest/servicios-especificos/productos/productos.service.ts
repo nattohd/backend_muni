@@ -42,5 +42,15 @@ export class ProductosService extends BaseService<Producto> {
         }
     }
 
+    async findAll() {
+        try {
+            const productos = await this.productoRepository.find();
+
+            return productos;
+        } catch (error) {
+            this.handleDbExceptions(error);
+        }
+    }
+
 
 }

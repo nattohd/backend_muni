@@ -3,6 +3,7 @@ import { ConfigModule } from '@nestjs/config';
 import { ScheduleModule } from '@nestjs/schedule';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { InventarioModule } from './inventario/inventario.module';
+import { SeedModule } from './seed/seed.module';
 
 
 
@@ -23,6 +24,7 @@ import { InventarioModule } from './inventario/inventario.module';
       autoLoadEntities: true,
     }),
     InventarioModule,
+    SeedModule,
   ],
 })
 export class AppModule { }

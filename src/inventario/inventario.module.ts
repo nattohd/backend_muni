@@ -33,6 +33,12 @@ import { UbicacionesService } from './rest/servicios-especificos/ubicaciones/ubi
         TandasService,
         UbicacionesService,
     ],
-    exports: [InventarioService, InventarioSocketService],
+    exports: [
+        ProductosService,
+        CategoriasService,
+        BodegasService,
+        TandasService,
+        UbicacionesService,
+    ],
 })
 export class InventarioModule { }
