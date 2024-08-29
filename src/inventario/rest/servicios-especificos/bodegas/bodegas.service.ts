@@ -38,14 +38,5 @@ export class BodegasService extends BaseService<Bodega> {
         }
     }
 
-    async findAll() {
-        try {
-            const bodegas = await this.bodegaRepository.find();
-
-            return bodegas;
-        } catch (error) {
-            this.handleDbExceptions(error);
-        }
-    }
 
 }

@@ -39,16 +39,7 @@ export class TandasService extends BaseService<Tanda> {
         }
     }
 
-    async findAll() {
-        try {
-            const tandas = await this.tandaRepository.find({
-                where: { isDeleted: false },
-            });
-            return tandas;
-        } catch (error) {
-            this.handleDbExceptions(error);
-        }
-    }
+
 
     async findAllBy(idCategoria: string): Promise<TandaResponse[]> {
         try {

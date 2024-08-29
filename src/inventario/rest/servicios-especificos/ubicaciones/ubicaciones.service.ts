@@ -40,15 +40,7 @@ export class UbicacionesService extends BaseService<Ubicacion> {
         }
     }
 
-    async findAll() {
-        try {
-            const ubicaciones = await this.ubicacionRepository.find();
 
-            return ubicaciones;
-        } catch (error) {
-            this.handleDbExceptions(error);
-        }
-    }
 
 
 }

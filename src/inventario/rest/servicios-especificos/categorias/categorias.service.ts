@@ -38,15 +38,6 @@ export class CategoriasService extends BaseService<Categoria> {
             this.handleDbExceptions(error);
         }
     }
-    async findAll() {
-        try {
-            const categorias = await this.categoriaRepository.find();
-
-            return categorias;
-        } catch (error) {
-            this.handleDbExceptions(error);
-        }
-    }
 
 
 
