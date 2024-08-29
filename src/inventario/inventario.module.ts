@@ -14,12 +14,17 @@ import { CategoriasService } from './rest/servicios-especificos/categorias/categ
 import { BodegasService } from './rest/servicios-especificos/bodegas/bodegas.service';
 import { TandasService } from './rest/servicios-especificos/tandas/tandas.service';
 import { UbicacionesService } from './rest/servicios-especificos/ubicaciones/ubicaciones.service';
+import { MovimientosModule } from "src/movimientos/movimientos.module";
 
 
 @Module({
     imports: [
-        // AuthModule,
         TypeOrmModule.forFeature([Bodega, Categoria, Ubicacion, Producto, Tanda,]),
+
+        //to allow circular import between "InventarioModule" and "MovimientoModule"
+        forwardRef(() => MovimientosModule),
+
+        //to allow circular import between socket and rest in this module
         forwardRef(() => InventarioModule),
     ],
     controllers: [InventarioController],
@@ -27,6 +32,7 @@ import { UbicacionesService } from './rest/servicios-especificos/ubicaciones/ubi
         InventarioService,
         InventarioSocketService,
         InventarioSocketGateway,
+
         ProductosService,
         CategoriasService,
         BodegasService,
@@ -34,6 +40,9 @@ import { UbicacionesService } from './rest/servicios-especificos/ubicaciones/ubi
         UbicacionesService,
     ],
     exports: [
+        TypeOrmModule,
+
+        //Services
         ProductosService,
         CategoriasService,
         BodegasService,

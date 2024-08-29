@@ -4,6 +4,7 @@ import { ScheduleModule } from '@nestjs/schedule';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { InventarioModule } from './inventario/inventario.module';
 import { SeedModule } from './seed/seed.module';
+import { MovimientosModule } from './movimientos/movimientos.module';
 
 
 
@@ -25,6 +26,7 @@ import { SeedModule } from './seed/seed.module';
     }),
     InventarioModule,
     SeedModule,
+    MovimientosModule,
   ],
 })
 export class AppModule { }
