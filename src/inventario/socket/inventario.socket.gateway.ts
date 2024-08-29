@@ -1,7 +1,7 @@
 import { SubscribeMessage, WebSocketGateway, WebSocketServer } from '@nestjs/websockets';
 import { InventarioSocketService } from './inventario.socket.service';
 import { Server, Socket } from 'socket.io';
-import { GetTandaDto } from '../dto/socket-dto/tandas/get-tandas.dto';
+import { GetTandaDto } from '../dto/socket-dto';
 
 @WebSocketGateway({ cors: true, namespace: 'inventario' })
 export class InventarioSocketGateway {

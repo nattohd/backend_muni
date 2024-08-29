@@ -21,11 +21,18 @@ export class BaseService<T> {
         }
     }
 
-    async findAll() {
+    async findAll(): Promise<T[]> {
         try {
             const metadata: EntityMetadata = this.repository.metadata;
 
             const queryBuilder = this.repository.createQueryBuilder('entity');
+
+            // Incluir relaciones con eager: true
+            metadata.relations.forEach(relation => {
+                if (relation.isEager) {
+                    queryBuilder.leftJoinAndSelect(`entity.${relation.propertyName}`, relation.propertyName);
+                }
+            });
 
             // Verifica si la entidad tiene la columna 'isDelete'
             if (metadata.findColumnWithPropertyName('isDelete')) {
@@ -38,6 +45,7 @@ export class BaseService<T> {
             this.handleDbExceptions(error);
         }
     }
+
 
 
     protected handleDbExceptions(error: any): void {

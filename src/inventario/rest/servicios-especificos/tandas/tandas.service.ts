@@ -1,11 +1,10 @@
 import { Injectable, } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { CreateTandaDto } from 'src/inventario/dto/rest-dto/tanda-dto/create-tanda.dto';
-import { Tanda } from 'src/inventario/entities/tanda.entity';
 import { Repository } from 'typeorm';
 import { BaseService } from '../base.service';
 import { TandaCreateSchema } from 'src/inventario/interfaces/tanda-create.interface';
 import { TandaResponse } from 'src/inventario/interfaces/tanda-response.interface';
+import { Tanda } from 'src/inventario/entities';
 
 @Injectable()
 export class TandasService extends BaseService<Tanda> {
@@ -49,6 +48,7 @@ export class TandasService extends BaseService<Tanda> {
             });
             const tandas = tandasData.map(t => {
                 delete t.isDeleted;
+                delete t.categoria; //Se incluye automaticamente por el eager=true
                 return {
                     ...t,
                     bodega: t.bodega.nombre,

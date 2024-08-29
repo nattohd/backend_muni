@@ -1,20 +1,14 @@
 import { forwardRef, Module } from "@nestjs/common";
+import { TypeOrmModule } from "@nestjs/typeorm";
+
 import { InventarioService } from "./rest/inventario.service";
 import { InventarioController } from "./rest/inventario.controller";
 import { InventarioSocketService } from "./socket/inventario.socket.service";
 import { InventarioSocketGateway } from "./socket/inventario.socket.gateway";
-import { TypeOrmModule } from "@nestjs/typeorm";
-import { Bodega } from "./entities/bodega.entity";
-import { Categoria } from "./entities/categoria.entity";
-import { Ubicacion } from "./entities/ubicacion.entity";
-import { Producto } from "./entities/producto.entity";
-import { Tanda } from "./entities/tanda.entity";
-import { ProductosService } from './rest/servicios-especificos/productos/productos.service';
-import { CategoriasService } from './rest/servicios-especificos/categorias/categorias.service';
-import { BodegasService } from './rest/servicios-especificos/bodegas/bodegas.service';
-import { TandasService } from './rest/servicios-especificos/tandas/tandas.service';
-import { UbicacionesService } from './rest/servicios-especificos/ubicaciones/ubicaciones.service';
+
 import { MovimientosModule } from "src/movimientos/movimientos.module";
+import { Bodega, Categoria, Producto, Tanda, Ubicacion } from "./entities";
+import { BodegasService, CategoriasService, ProductosService, TandasService, UbicacionesService } from "./rest/servicios-especificos";
 
 
 @Module({

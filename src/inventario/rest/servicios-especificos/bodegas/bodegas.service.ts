@@ -1,9 +1,10 @@
 import { Injectable, NotFoundException, } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { CreateBodegaDto } from 'src/inventario/dto/rest-dto/bodega-dto/create-bodega.dto';
-import { Bodega } from 'src/inventario/entities/bodega.entity';
+
 import { Repository } from 'typeorm';
 import { BaseService } from '../base.service';
+import { Bodega } from 'src/inventario/entities';
+import { CreateBodegaDto } from 'src/inventario/dto/rest-dto';
 
 @Injectable()
 export class BodegasService extends BaseService<Bodega> {
