@@ -1,10 +1,10 @@
 import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
 import { InventarioService } from './inventario.service';
-import { CreateProductoDto } from '../dto/producto-dto/create-producto.dto';
-import { CreateCategoriaDto } from '../dto/categoria-dto/create-categoria.dto';
-import { CreateUbicacionDto } from '../dto/ubicacion-dto/create-ubicacion.dto';
-import { CreateBodegaDto } from '../dto/bodega-dto/create-bodega.dto';
-import { CreateTandaDto } from '../dto/tanda-dto/create-tanda.dto';
+import { CreateProductoDto } from '../dto/rest-dto/producto-dto/create-producto.dto';
+import { CreateCategoriaDto } from '../dto/rest-dto/categoria-dto/create-categoria.dto';
+import { CreateUbicacionDto } from '../dto/rest-dto/ubicacion-dto/create-ubicacion.dto';
+import { CreateBodegaDto } from '../dto/rest-dto/bodega-dto/create-bodega.dto';
+import { CreateTandaDto } from '../dto/rest-dto/tanda-dto/create-tanda.dto';
 
 
 @Controller('inventario')

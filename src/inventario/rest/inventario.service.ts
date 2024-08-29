@@ -1,19 +1,19 @@
 import { BadRequestException, forwardRef, Inject, Injectable, InternalServerErrorException, Logger } from '@nestjs/common';
 import { InventarioSocketService } from '../socket/inventario.socket.service';
-import { CreateProductoDto } from '../dto/producto-dto/create-producto.dto';
+import { CreateProductoDto } from '../dto/rest-dto/producto-dto/create-producto.dto';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Producto } from '../entities/producto.entity';
 import { Repository } from 'typeorm';
-import { CreateCategoriaDto } from '../dto/categoria-dto/create-categoria.dto';
+import { CreateCategoriaDto } from '../dto/rest-dto/categoria-dto/create-categoria.dto';
 import { Categoria } from '../entities/categoria.entity';
 import { ProductosService } from './servicios-especificos/productos/productos.service';
 import { CategoriasService } from './servicios-especificos/categorias/categorias.service';
 import { BodegasService } from './servicios-especificos/bodegas/bodegas.service';
 import { TandasService } from './servicios-especificos/tandas/tandas.service';
 import { UbicacionesService } from './servicios-especificos/ubicaciones/ubicaciones.service';
-import { CreateBodegaDto } from '../dto/bodega-dto/create-bodega.dto';
-import { CreateUbicacionDto } from '../dto/ubicacion-dto/create-ubicacion.dto';
-import { CreateTandaDto } from '../dto/tanda-dto/create-tanda.dto';
+import { CreateBodegaDto } from '../dto/rest-dto/bodega-dto/create-bodega.dto';
+import { CreateUbicacionDto } from '../dto/rest-dto/ubicacion-dto/create-ubicacion.dto';
+import { CreateTandaDto } from '../dto/rest-dto/tanda-dto/create-tanda.dto';
 
 
 @Injectable()
@@ -72,12 +72,42 @@ export class InventarioService {
         producto,
         ubicacion,
       });
-      //TODO: notificar por sockets
+
+      //*Se notifica a los clientes por socket
+      await this.inventarioSocketService.notifyTandaCreated(tanda, idCategoria);
       return tanda;
     } catch (error) {
       console.log({ error })
       throw new BadRequestException(error.message);
     }
+  }
+
+  async findAllTandasByCategoria(idCategoria: string) {
+    const tandas = await this.tandasService.findAllBy(idCategoria);
+    return tandas;
+  }
+  async findAllCategorias() {
+    // Categorias sin su cantidad total de stock
+    const categoriasData = await this.categoriaService.findAll();
+    const tandas = await this.tandasService.findAll();
+
+    // Mapear cada categoría para calcular su stock total
+    const categorias = categoriasData.map(c => {
+      const stock = tandas.reduce((accum, tanda) => {
+        if (tanda.categoria.id === c.id) {
+          return accum + tanda.cantidadActual;
+        }
+        return accum;
+      }, 0);
+
+      // Retornar la categoría con su stock total
+      return {
+        ...c,
+        stock
+      };
+    });
+
+    return categorias;
   }
 
 
