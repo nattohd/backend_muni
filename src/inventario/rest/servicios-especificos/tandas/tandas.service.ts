@@ -1,4 +1,4 @@
-import { Injectable, } from '@nestjs/common';
+import { BadRequestException, Injectable, } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { BaseService } from '../base.service';
@@ -23,14 +23,25 @@ export class TandasService extends BaseService<Tanda> {
                 ...tandaCreateSchema,
             });
             const tanda = await this.tandaRepository.save(tandaCreated);
-            delete tanda.categoria;
-            delete tanda.isDeleted;
+
+            // Cargar las relaciones necesarias después de la creación
+            const tandaWithRelations = await this.tandaRepository.findOne({
+                where: { id: tanda.id },
+                relations: ['bodega', 'producto', 'ubicacion',], // Especifica las relaciones que deseas cargar
+            });
+
+            if (!tandaWithRelations) {
+                throw new BadRequestException('La tanda no se pudo encontrar después de la creación');
+            }
+
+            delete tandaWithRelations.categoria;
+            delete tandaWithRelations.isDeleted;
 
             return {
-                ...tanda,
-                bodega: tanda.bodega.nombre,
-                producto: tanda.producto.nombre,
-                ubicacion: tanda.ubicacion.descripcion,
+                ...tandaWithRelations,
+                bodega: tandaWithRelations.bodega.nombre,
+                producto: tandaWithRelations.producto.nombre,
+                ubicacion: tandaWithRelations.ubicacion.descripcion,
                 //Categoria ya es conocida, para el socket que esta escuchando
             };
         } catch (error) {

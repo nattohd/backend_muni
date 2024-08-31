@@ -45,10 +45,10 @@ export class InventarioService {
   async createTanda(createTandaDto: CreateTandaDto) {
     try {
       const { idBodega, idCategoria, idProducto, idUbicacion } = createTandaDto;
-      const bodega = await this.bodegasService.findOneById(idBodega);
-      const categoria = await this.categoriaService.findOneById(idCategoria);
-      const producto = await this.productoService.findOneById(idProducto);
-      const ubicacion = await this.ubicacionesService.findOneById(idUbicacion);
+      const bodega = await this.bodegasService.generateClass(idBodega);
+      const categoria = await this.categoriaService.generateClass(idCategoria);
+      const producto = await this.productoService.generateClass(idProducto);
+      const ubicacion = await this.ubicacionesService.generateClass(idUbicacion);
 
       const { cantidadIngresada, fechaVencimiento } = createTandaDto;
 
