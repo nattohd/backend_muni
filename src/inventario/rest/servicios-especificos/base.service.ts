@@ -1,4 +1,4 @@
-import { BadRequestException, InternalServerErrorException, Logger } from '@nestjs/common';
+import { BadRequestException, InternalServerErrorException, Logger, NotFoundException } from '@nestjs/common';
 import { EntityMetadata, Repository } from 'typeorm';
 
 export class BaseService<T> {
@@ -47,6 +47,19 @@ export class BaseService<T> {
 
             const entities = await queryBuilder.getMany();
             return entities;
+        } catch (error) {
+            this.handleDbExceptions(error);
+        }
+    }
+
+    async findOne(id: string) {
+        try {
+            //Siempre existe la propiedad id
+            const entity = await this.repository.findOne({ where: { id } as any });
+            if (!entity) {
+                throw new NotFoundException();
+            }
+            return entity;
         } catch (error) {
             this.handleDbExceptions(error);
         }

@@ -49,8 +49,6 @@ export class TandasService extends BaseService<Tanda> {
         }
     }
 
-
-
     async findAllBy(idCategoria: string): Promise<TandaResponse[]> {
         try {
             const tandasData = await this.tandaRepository.find({
@@ -69,6 +67,19 @@ export class TandasService extends BaseService<Tanda> {
                 };
             })
             return tandas;
+        } catch (error) {
+            this.handleDbExceptions(error);
+        }
+    }
+
+    async substractAmountToTanda(idTanda: string, amount: number) {
+        try {
+            const tandaToUpdate = await this.findOne(idTanda);
+            tandaToUpdate.cantidadActual -= amount;//Restar cantidad
+
+            const tanda = await this.tandaRepository.save(tandaToUpdate);
+            return tanda;
+
         } catch (error) {
             this.handleDbExceptions(error);
         }

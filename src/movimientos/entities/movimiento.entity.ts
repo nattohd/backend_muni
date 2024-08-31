@@ -10,10 +10,10 @@ export class Movimiento {
     @Column()
     cantidadRetirada: number;
 
-    @Column({ type: 'date' })
+    @Column({ type: 'date', default: () => 'CURRENT_DATE' })
     fecha: string;
 
-    @Column()
+    @Column({ type: 'time', default: () => 'CURRENT_TIME' })
     hora: string;
 
     //This is soft delete
