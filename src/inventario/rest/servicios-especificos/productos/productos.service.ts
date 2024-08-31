@@ -42,6 +42,33 @@ export class ProductosService extends BaseService<Producto> {
         }
     }
 
+    async findManyByName(nameSuggest: string): Promise<Producto[]> {
+        try {
+            const productos = await this.productoRepository
+                .createQueryBuilder('producto')
+                .leftJoinAndSelect('producto.categoria', 'categoria')
+                .where('producto.nombre ILIKE :nameSuggest', { nameSuggest: `%${nameSuggest}%` })
+                .andWhere('producto.isDeleted = :isDeleted', { isDeleted: false })
+                .orderBy(`CASE 
+                            WHEN producto.nombre ILIKE :exactMatch THEN 1
+                            ELSE 2
+                          END`, 'ASC')
+                .addOrderBy('LENGTH(producto.nombre)', 'ASC')
+                .setParameter('exactMatch', `${nameSuggest}%`)
+                .getMany();
+
+            if (productos.length === 0) {
+                throw new NotFoundException(`No products found matching "${nameSuggest}"`);
+            }
+
+            return productos;
+        } catch (error) {
+            this.handleDbExceptions(error);
+        }
+    }
+
+
+
 
 
 

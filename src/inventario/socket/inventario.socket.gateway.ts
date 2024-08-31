@@ -2,6 +2,7 @@ import { SubscribeMessage, WebSocketGateway, WebSocketServer } from '@nestjs/web
 import { InventarioSocketService } from './inventario.socket.service';
 import { Server, Socket } from 'socket.io';
 import { GetTandaDto } from '../dto/socket-dto';
+import { GetProductosDto } from '../dto/socket-dto/productos/get-productos.dto';
 
 @WebSocketGateway({ cors: true, namespace: 'inventario' })
 export class InventarioSocketGateway {
@@ -35,6 +36,14 @@ export class InventarioSocketGateway {
       await this.inventarioSocketService.getInventarioTandasByCategoria(idCategoria);
     client.emit(`${idCategoria}-tanda`, tandasPorCategoria);
     // this.wss.emit(`${idCategoria}-tanda`, tandasPorCategoria); // para pruebas
+  }
+
+  @SubscribeMessage('getManyProductsByName')
+  async findManyProductsByName(client: Socket, payload: GetProductosDto) {
+    const data =
+      await this.inventarioSocketService.getProductosByName(payload);
+
+    client.emit('loadProductsByName', data);
   }
 }
 

@@ -75,6 +75,23 @@ export class InventarioService {
     const tandas = await this.tandasService.findAllBy(idCategoria);
     return tandas;
   }
+
+  async findManyProductosByName(nameSuggested: string) {
+    const productosData = await this.productoService.findManyByName(nameSuggested);
+    const productos = productosData.map(p => {
+      delete p.barcode;
+      delete p.descripcion;
+      delete p.isDeleted;
+      delete p.urlImagen;
+
+      return {
+        ...p,
+        categoria: p.categoria.id,
+      };
+    })
+    return productos;
+  }
+
   async findAllCategorias() {
     try {
       // Categorias sin su cantidad total de stock

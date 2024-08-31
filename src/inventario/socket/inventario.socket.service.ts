@@ -2,6 +2,7 @@ import { BadRequestException, forwardRef, Inject, Injectable } from '@nestjs/com
 import { InventarioService } from '../rest/inventario.service';
 import { Server } from 'socket.io';
 import { TandaResponse } from '../interfaces/tanda-response.interface';
+import { GetProductosDto } from '../dto/socket-dto/productos/get-productos.dto';
 
 @Injectable()
 export class InventarioSocketService {
@@ -39,6 +40,17 @@ export class InventarioSocketService {
             return categorias;
         } else {
             console.error('WebSocket server not initialized - To get categorias');
+            throw new BadRequestException();
+        }
+    }
+
+    async getProductosByName(getProductosDto: GetProductosDto) {
+        const { nameSuggest } = getProductosDto;
+        if (this.wss) {
+            const productos = await this.inventarioService.findManyProductosByName(nameSuggest);
+            return productos;
+        } else {
+            console.error(`WebSocket server not initialized - To get productos by "${nameSuggest}}"`);
             throw new BadRequestException();
         }
     }
