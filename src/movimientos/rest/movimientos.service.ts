@@ -1,4 +1,4 @@
-import { forwardRef, Inject, Injectable } from '@nestjs/common';
+import { forwardRef, Inject, Injectable, InternalServerErrorException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Movimiento } from '../entities/movimiento.entity';
 import { DataSource, QueryRunner, Repository } from 'typeorm';
@@ -29,6 +29,7 @@ export class MovimientosService {
         await queryRunner.connect();
         await queryRunner.startTransaction();
 
+
         try {
             // Crear el movimiento
             const tandaInstance = await this.tandasService.generateClass(idTanda);
@@ -43,12 +44,14 @@ export class MovimientosService {
             // Descontar la cantidad del movimiento a la tanda
             await this.tandasService.substractAmountToTanda(idTanda, cantidadRetirada);
 
+            throw new InternalServerErrorException();
             // Confirmar la transacción
             await queryRunner.commitTransaction();
 
             //* Notificar por socket movimiento nuevo
             //* Notificar actualización de la tanda
 
+            //Error de prueba
             return movimiento;
         } catch (error) {
             // Revertir todos los cambios si ocurre un error
