@@ -1,6 +1,6 @@
 import { BadRequestException, Injectable, } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
+import { QueryRunner, Repository } from 'typeorm';
 import { BaseService } from '../base.service';
 import { TandaCreateSchema } from 'src/inventario/interfaces/tanda-create.interface';
 import { TandaResponse } from 'src/inventario/interfaces/tanda-response.interface';
@@ -72,12 +72,16 @@ export class TandasService extends BaseService<Tanda> {
         }
     }
 
-    async substractAmountToTanda(idTanda: string, amount: number) {
+    async substractAmountToTanda(queryRunner: QueryRunner, idTanda: string, amount: number) {
         try {
             const tandaToUpdate = await this.findOne(idTanda);
+
+            if (tandaToUpdate.cantidadActual < amount) {
+                throw new BadRequestException('Cantidad a retirar no permitida');
+            }
             tandaToUpdate.cantidadActual -= amount;//Restar cantidad
 
-            const tanda = await this.tandaRepository.save(tandaToUpdate);
+            const tanda = await queryRunner.manager.save(tandaToUpdate);
             return tanda;
 
         } catch (error) {

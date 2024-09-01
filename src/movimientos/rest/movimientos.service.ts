@@ -42,9 +42,9 @@ export class MovimientosService {
             const movimiento = await queryRunner.manager.save(movimientoCreated);
 
             // Descontar la cantidad del movimiento a la tanda
-            await this.tandasService.substractAmountToTanda(idTanda, cantidadRetirada);
+            await this.tandasService.substractAmountToTanda(queryRunner, idTanda, cantidadRetirada);
 
-            throw new InternalServerErrorException();
+            // throw new InternalServerErrorException();
             // Confirmar la transacción
             await queryRunner.commitTransaction();
 
