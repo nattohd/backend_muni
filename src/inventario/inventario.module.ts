@@ -42,6 +42,7 @@ import { BodegasService, CategoriasService, ProductosService, TandasService, Ubi
         BodegasService,
         TandasService,
         UbicacionesService,
+        InventarioSocketService,
     ],
 })
 export class InventarioModule { }

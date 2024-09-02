@@ -27,15 +27,14 @@ export class InventarioSocketGateway {
   async findAllTandasOfCategoria(client: Socket, payload: GetTandaDto) {
     const { idCategoria } = payload;
 
-    const room = `${idCategoria}-categoria`;
-    client.join(room);
+    // const room = `${idCategoria}-categoria`;
+    // client.join(room);
 
     if (!idCategoria) return;
 
     const tandasPorCategoria =
       await this.inventarioSocketService.getInventarioTandasByCategoria(idCategoria);
     client.emit(`${idCategoria}-tanda`, tandasPorCategoria);
-    // this.wss.emit(`${idCategoria}-tanda`, tandasPorCategoria); // para pruebas
   }
 
   @SubscribeMessage('getManyProductsByName')

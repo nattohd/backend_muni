@@ -15,12 +15,23 @@ export class InventarioSocketService {
         private readonly inventarioService: InventarioService,
     ) { }
 
-    async notifyTandaCreated(tanda: TandaResponse, idCategoria: string) {
+    async notifyTandaCreated(tanda: TandaResponse) {
         if (this.wss) {
-            const room = `${idCategoria}-categoria`;
-            this.wss.to(room).emit('newTandaCreated', tanda);
+            // const room = `${idCategoria}-categoria`;
+            //?Emision de cambios
+            this.wss.emit('newTandaCreated', tanda);
         } else {
             console.error('WebSocket server not initialized - To notify tanda has been created');
+            throw new BadRequestException();
+        }
+    }
+    async notifyTandaUpdate(tanda: TandaResponse) {
+        if (this.wss) {
+            // const room = `${idCategoria}-categoria`;
+            //?Emision de cambios
+            this.wss.emit('newTandaUpdate', tanda);
+        } else {
+            console.error('WebSocket server not initialized - To notify tanda has been updated');
             throw new BadRequestException();
         }
     }

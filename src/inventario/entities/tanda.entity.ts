@@ -25,13 +25,13 @@ export class Tanda {
     @Column({ default: false })
     isDeleted: boolean;
 
-    @ManyToOne(() => Bodega, (bodega) => bodega.tandas)
+    @ManyToOne(() => Bodega, (bodega) => bodega.tandas, { eager: true })
     bodega: Bodega;
 
-    @ManyToOne(() => Producto, (producto) => producto.tandas)
+    @ManyToOne(() => Producto, (producto) => producto.tandas, { eager: true })
     producto: Producto;
 
-    @ManyToOne(() => Ubicacion, (ubicacion) => ubicacion.tandas)
+    @ManyToOne(() => Ubicacion, (ubicacion) => ubicacion.tandas, { eager: true })
     ubicacion: Ubicacion;
 
     @ManyToOne(() => Categoria, (categoria) => categoria.tandas, { eager: true })

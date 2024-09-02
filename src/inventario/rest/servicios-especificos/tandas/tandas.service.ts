@@ -34,7 +34,6 @@ export class TandasService extends BaseService<Tanda> {
                 throw new BadRequestException('La tanda no se pudo encontrar después de la creación');
             }
 
-            delete tandaWithRelations.categoria;
             delete tandaWithRelations.isDeleted;
 
             return {
@@ -42,6 +41,7 @@ export class TandasService extends BaseService<Tanda> {
                 bodega: tandaWithRelations.bodega.nombre,
                 producto: tandaWithRelations.producto.nombre,
                 ubicacion: tandaWithRelations.ubicacion.descripcion,
+                categoria: tandaWithRelations.categoria.id,
                 //Categoria ya es conocida, para el socket que esta escuchando
             };
         } catch (error) {
@@ -57,12 +57,12 @@ export class TandasService extends BaseService<Tanda> {
             });
             const tandas = tandasData.map(t => {
                 delete t.isDeleted;
-                delete t.categoria; //Se incluye automaticamente por el eager=true
                 return {
                     ...t,
                     bodega: t.bodega.nombre,
                     producto: t.producto.nombre,
                     ubicacion: t.ubicacion.descripcion,
+                    categoria: t.categoria.id,
                     //Categoria ya es conocida
                 };
             })
@@ -72,6 +72,7 @@ export class TandasService extends BaseService<Tanda> {
         }
     }
 
+    //?@Update
     async substractAmountToTanda(queryRunner: QueryRunner, idTanda: string, amount: number) {
         try {
             const tandaToUpdate = await this.findOne(idTanda);
@@ -82,7 +83,14 @@ export class TandasService extends BaseService<Tanda> {
             tandaToUpdate.cantidadActual -= amount;//Restar cantidad
 
             const tanda = await queryRunner.manager.save(tandaToUpdate);
-            return tanda;
+            delete tanda.isDeleted;
+            return {
+                ...tanda,
+                bodega: tanda.bodega.nombre,
+                producto: tanda.producto.nombre,
+                ubicacion: tanda.ubicacion.descripcion,
+                categoria: tanda.categoria.id,
+            };
 
         } catch (error) {
             this.handleDbExceptions(error);

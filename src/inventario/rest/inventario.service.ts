@@ -63,7 +63,7 @@ export class InventarioService {
       });
 
       //*Se notifica a los clientes por socket
-      await this.inventarioSocketService.notifyTandaCreated(tanda, idCategoria);
+      await this.inventarioSocketService.notifyTandaCreated(tanda);
       return tanda;
     } catch (error) {
       console.log({ error })
@@ -96,25 +96,26 @@ export class InventarioService {
     try {
       // Categorias sin su cantidad total de stock
       const categoriasData = await this.categoriaService.findAll();
-      const tandas = await this.tandasService.findAll();
-      console.log({ tandas })
+      // const tandas = await this.tandasService.findAll();
+      // console.log({ tandas })
 
-      // Mapear cada categoría para calcular su stock total
+      //Mapear cada categoría para calcular su stock total
       const categorias = categoriasData.map(c => {
-        const stock = tandas.reduce((accum, tanda) => {
-          if (tanda.categoria.id === c.id) {
-            return accum + tanda.cantidadActual;
-          }
-          return accum;
-        }, 0);
+        // const stock = tandas.reduce((accum, tanda) => {
+        //   if (tanda.categoria.id === c.id) {
+        //     return accum + tanda.cantidadActual;
+        //   }
+        //   return accum;
+        // }, 0);
 
         delete c.isDeleted;
 
         // Retornar la categoría con su stock total
-        return {
-          ...c,
-          stock
-        };
+        // return {
+        //   ...c,
+        //   stock
+        // };
+        return c;
       });
 
       return categorias;

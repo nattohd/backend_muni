@@ -42,14 +42,16 @@ export class MovimientosService {
             const movimiento = await queryRunner.manager.save(movimientoCreated);
 
             // Descontar la cantidad del movimiento a la tanda
-            await this.tandasService.substractAmountToTanda(queryRunner, idTanda, cantidadRetirada);
+            const tanda = await this.tandasService.substractAmountToTanda(queryRunner, idTanda, cantidadRetirada);
 
             // throw new InternalServerErrorException();
             // Confirmar la transacción
             await queryRunner.commitTransaction();
 
             //* Notificar por socket movimiento nuevo
+            await this.movimientosSocketService.notifyMovimientoCreated(movimiento)
             //* Notificar actualización de la tanda
+            await this.movimientosSocketService.notifyTandaDiscount(tanda)
 
             //Error de prueba
             return movimiento;
